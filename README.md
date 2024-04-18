@@ -1,4 +1,4 @@
-# Dynamic-Knowledge-Adapter-with-Probabilistic-Calibration-for-GFSS
+# Dynamic Knowledge Adapter with Probabilistic Calibration for Generalized Few-Shot Semantic Segmentation
 
 ## Description
 This repository contains separate environments for training and testing machine learning models, each with its own requirements file for ease of setup and independent use.
