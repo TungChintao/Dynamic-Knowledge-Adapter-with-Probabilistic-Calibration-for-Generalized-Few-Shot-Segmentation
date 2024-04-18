@@ -1,0 +1,61 @@
+DATA:
+  data_name: OpenEarthMap few-shot challenge
+  data_root:  ../OEM-Fewshot-Data/valset # Download the 'valset' and set your data_root to 'valtset' folder
+  rl_root: ../OEM-Fewshot-Data/trainset/images
+  rl_list: ../OEM-Fewshot-Data/train.txt
+  images_dir: images/  
+  labels_dir: labels/
+  data_list_path: data/val.json
+  novel_classes:   # Change the novel classnames for Validation/Testing. The current classnames are Validation classes
+    8: 'road type 2'        
+    9: 'river'               
+    10: 'boat & ship'       
+    11: 'agric land type 2'       
+  workers: 1
+  image_size: 1024
+  mean: [0.4449, 0.4570, 0.3919] 
+  std:  [0.1662, 0.1492, 0.1505] 
+  pin_memory: True
+
+MODEL:
+  model_name: PSPNet
+  encoder_name: efficientnet-b7
+  pretrained:  ./pretained/best.pth # Download the model and set the pretrained path to `model.best.pth` file
+  ignore_label: 255
+  zoom_factor: 8
+  layers: 50
+  vgg: False
+  data_set: oem
+  bottleneck_dim: 512
+
+EVALUATION:
+  shot: 5   # Only 5-shot is allowed
+  save_pred_maps: True
+  save_ious: True  
+  batch_size_val: 1  # Only batch size 1 is supported (Evaluate one query image at a time)
+  shuffle_test_data: False
+  threshold_alpha: 0.9
+  threshold_beta: 0.15
+  temperature: 6
+  adjust_p: 0.1
+  relabel_num: 120
+  manual_seed: 2023
+  gpus: [0]
+
+AUXNET:
+  momentum: 0.9
+  weight_decay: 0.0001 
+  low_rank: 4
+  aux_iter: 50
+  aux_lr: 0.0002
+  aux_optim_lr: 0.00005
+  emd_lr: 0.00002
+
+CLASSIFIER:   # All the settings here are from the baseline paper
+  weights: [100, 100, 20, 100]  
+  adapt_iter: 100 
+  cls_lr: 0.001   
+  #cls_lr: 0.0005
+  pi_estimation_strategy: self
+  pi_update_at: [10,20,30,40,50,60,70,80,90]
+  fine_tune_base_classifier: True
